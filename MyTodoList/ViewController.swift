@@ -13,6 +13,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     //TODOを格納する配列
     var todoList = [MyTodo]()
     
+    //入力用のTextField
+    var titleTextField: UITextField?
+    var deadlineTextField: UITextField?
+    
+    //UIDatePickerの用意
+    let datePicker = UIDatePicker()
+    var pickerToolBar = UIToolbar()
+    
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +32,23 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 todoList.appendContentsOf(storedTodoList)
             }
         }
+        
+        /*//datePickerの設置
+        self.datePicker.datePickerMode = UIDatePickerMode.Date
+        
+        // キーボードに表示するツールバーの表示
+        pickerToolBar = UIToolbar(frame: CGRectMake(0, self.view.frame.size.height/6, self.view.frame.size.width, 40.0))
+        pickerToolBar.layer.position = CGPoint(x: self.view.frame.size.width/2, y: self.view.frame.size.height-20.0)
+        pickerToolBar.barStyle = .BlackTranslucent
+        pickerToolBar.tintColor = UIColor.whiteColor()
+        pickerToolBar.backgroundColor = UIColor.blackColor()
+        
+        //ボタンの設定
+        //完了ボタンを設定
+        let okBarBtn = UIBarButtonItem(title: "OK", style: .Done, target: self, action: Selector("okBarBtnPush"))
+        //ツールバーにボタンを表示
+        pickerToolBar.items = [okBarBtn]*/
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -38,35 +63,48 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let alertController = UIAlertController(title: "TODO追加", message: "TODOを入力してください", preferredStyle: UIAlertControllerStyle.Alert)
         
         //テキストエリアを追加
-        alertController.addTextFieldWithConfigurationHandler(nil)
+        alertController.addTextFieldWithConfigurationHandler( { (title: UITextField!) -> Void in
+            self.titleTextField = title
+            title.placeholder = "Title"
+        })
+        alertController.addTextFieldWithConfigurationHandler( { (deadline: UITextField!) -> Void in
+            self.deadlineTextField = deadline
+            deadline.placeholder = "Deadline"
+            //self.datePicker.addTarget(self, action: Selector("changedDatePicker"), forControlEvents: UIControlEvents.ValueChanged)
+            //deadline.inputView = self.datePicker
+        })
         
         //OKボタンが押された時の処理
         let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default) {
             (action:UIAlertAction) -> Void in
             
-            //Todoタイトル入力用のtextFieldを用意
-            if let textField = alertController.textFields?.first {
-                
-                //todoListタイトルに挿入
+            //アラートのUITextFieldsを全部配列として取得
+            let textFields:Array<UITextField>? = alertController.textFields as Array<UITextField>?
+            
+            //入力されたTodoをtodoListに追加
+            if textFields != nil {
                 let myTodo = MyTodo()
-                myTodo.todoTitle = textField.text
+                //textFieldsの１個目がTitle
+                myTodo.todoTitle = alertController.textFields![0].text!
+                //textFieldsの2個目がDeadline
+                myTodo.deadline = alertController.textFields![1].text!
+                //todoListに追加
                 self.todoList.insert(myTodo, atIndex: 0)
-                
-                //テーブルに行が追加されたことをテーブルに通知
-                self.tableView.insertRowsAtIndexPaths(
-                    [NSIndexPath(forRow: 0, inSection: 0)],
-                    withRowAnimation: UITableViewRowAnimation.Right)
-                
-                //保存処理
-                //NSData型にシリアライズする
-                let data :NSData = NSKeyedArchiver.archivedDataWithRootObject(self.todoList)
-                
-                //NSUserDefaultsに保存
-                let userDefaults = NSUserDefaults.standardUserDefaults()
-                userDefaults.setObject(data, forKey: "todoList")
-                userDefaults.synchronize()
-
             }
+            
+            //テーブルに行が追加されたことをテーブルに通知
+            self.tableView.insertRowsAtIndexPaths(
+                [NSIndexPath(forRow: 0, inSection: 0)],
+                withRowAnimation: UITableViewRowAnimation.Right)
+            
+            //保存処理
+            //NSData型にシリアライズする
+            let data :NSData = NSKeyedArchiver.archivedDataWithRootObject(self.todoList)
+            
+            //NSUserDefaultsに保存
+            let userDefaults = NSUserDefaults.standardUserDefaults()
+            userDefaults.setObject(data, forKey: "todoList")
+            userDefaults.synchronize()
         }
         //OKボタンを追加
         alertController.addAction(okAction)
@@ -80,6 +118,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         //アラートダイアログを表示
         presentViewController(alertController, animated: true, completion: nil)
     }
+    
+    /*/*
+    datePickerのOKボタンを押した時の処理
+    */
+    func okBarBtnPush(sender: AnyObject?){
+        let dateFormatter = NSDateFormatter()
+        let pickerDate = datePicker.date
+        deadlineTextField!.text = dateFormatter.stringFromDate(pickerDate)
+        self.view.endEditing(true)
+    }*/
 
     /*
     テーブルの行数を返す
@@ -159,7 +207,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         //削除処理かどうか
         if editingStyle == .Delete {
             
-            //TODOリストから削除
+            //todoListから削除
             todoList.removeAtIndex(indexPath.row)
             
             //セルを削除
@@ -185,6 +233,9 @@ class MyTodo: NSObject, NSCoding {
     
     //Todoを完了したかどうかを表すフラグ
     var todoDone :Bool = false
+    
+    //Todoの締め切り
+    var deadline :String?
     
     //コンストラクタ
     override init() {
