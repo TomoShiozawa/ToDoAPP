@@ -25,7 +25,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //読み込み処理(ここは勉強不足)
+        //Todoデータの読み込み処理(ここは勉強不足)
         let userDefaults = NSUserDefaults.standardUserDefaults()
         if let todoListData = userDefaults.objectForKey("todoList") as? NSData {
             if let storedTodoList = NSKeyedUnarchiver.unarchiveObjectWithData(todoListData) as? [MyTodo] {
@@ -33,21 +33,20 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             }
         }
         
-        /*//datePickerの設置
+        //datePickerの設定
         self.datePicker.datePickerMode = UIDatePickerMode.Date
+        self.datePicker.addTarget(self, action: #selector(ViewController.datePickerValueChanged), forControlEvents: UIControlEvents.ValueChanged)
         
-        // キーボードに表示するツールバーの表示
+        // datePickerに表示するツールバーのいろいろ
         pickerToolBar = UIToolbar(frame: CGRectMake(0, self.view.frame.size.height/6, self.view.frame.size.width, 40.0))
         pickerToolBar.layer.position = CGPoint(x: self.view.frame.size.width/2, y: self.view.frame.size.height-20.0)
         pickerToolBar.barStyle = .BlackTranslucent
         pickerToolBar.tintColor = UIColor.whiteColor()
         pickerToolBar.backgroundColor = UIColor.blackColor()
         
-        //ボタンの設定
-        //完了ボタンを設定
-        let okBarBtn = UIBarButtonItem(title: "OK", style: .Done, target: self, action: Selector("okBarBtnPush"))
-        //ツールバーにボタンを表示
-        pickerToolBar.items = [okBarBtn]*/
+        //datePickerのツールバーに完了ボタンを設定
+        let okBarBtn = UIBarButtonItem(title: "OK", style: .Done, target: self, action: #selector(ViewController.okBarBtnPush(_:)))
+        pickerToolBar.items = [okBarBtn]
 
     }
 
@@ -71,7 +70,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.deadlineTextField = deadline
             deadline.placeholder = "Deadline"
             //self.datePicker.addTarget(self, action: Selector("changedDatePicker"), forControlEvents: UIControlEvents.ValueChanged)
-            //deadline.inputView = self.datePicker
+            deadline.inputView = self.datePicker
+            deadline.inputAccessoryView = self.pickerToolBar
         })
         
         //OKボタンが押された時の処理
@@ -119,15 +119,24 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         presentViewController(alertController, animated: true, completion: nil)
     }
     
-    /*/*
+    /*
     datePickerのOKボタンを押した時の処理
     */
     func okBarBtnPush(sender: AnyObject?){
+        deadlineTextField!.resignFirstResponder()
+    }
+    
+    
+    /*
+    datePickerが変更されたきの処理
+    */
+    func datePickerValueChanged(sender:UIDatePicker) {
         let dateFormatter = NSDateFormatter()
-        let pickerDate = datePicker.date
-        deadlineTextField!.text = dateFormatter.stringFromDate(pickerDate)
-        self.view.endEditing(true)
-    }*/
+        dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
+        dateFormatter.timeStyle = NSDateFormatterStyle.NoStyle
+        deadlineTextField!.text = dateFormatter.stringFromDate(sender.date)
+        
+    }
 
     /*
     テーブルの行数を返す
