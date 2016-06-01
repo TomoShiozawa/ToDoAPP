@@ -69,7 +69,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         alertController.addTextFieldWithConfigurationHandler( { (deadline: UITextField!) -> Void in
             self.deadlineTextField = deadline
             deadline.placeholder = "Deadline"
-            //self.datePicker.addTarget(self, action: Selector("changedDatePicker"), forControlEvents: UIControlEvents.ValueChanged)
             deadline.inputView = self.datePicker
             deadline.inputAccessoryView = self.pickerToolBar
         })
@@ -85,7 +84,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             if textFields != nil {
                 let myTodo = MyTodo()
                 //textFieldsの１個目がTitle
-                myTodo.todoTitle = alertController.textFields![0].text!
+                myTodo.title = alertController.textFields![0].text!
                 //textFieldsの2個目がDeadline
                 myTodo.deadline = alertController.textFields![1].text!
                 //todoListに追加
@@ -158,10 +157,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let todo = todoList[indexPath.row]
         
         //セルのラベルにTODOのタイトルをセット
-        cell.textLabel!.text = todo.todoTitle
+        cell.textLabel!.text = todo.title
         
         //状態によってチェックマークをつける
-        if todo.todoDone {
+        if todo.status {
             //完了していたらチェックマーク
             cell.accessoryType = UITableViewCellAccessoryType.Checkmark
         }
@@ -173,18 +172,20 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return cell
     }
     
-    //セルをタップした時の処理
+    /*
+    セルをタップした時の処理
+    */
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let todo = todoList[indexPath.row]
         
         //完了にするかどうか
-        if todo.todoDone {
+        if todo.status {
             //完了済みの場合は未完に変更
-            todo.todoDone = false
+            todo.status = false
         }
         else {
             //未完の場合は完了済みに変更
-            todo.todoDone = true
+            todo.status = true
         }
         
         //セルの状態を変更
@@ -238,13 +239,22 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 class MyTodo: NSObject, NSCoding {
 
     //Todoのタイトル
-    var todoTitle :String?
+    var title :String?
     
     //Todoを完了したかどうかを表すフラグ
-    var todoDone :Bool = false
+    var status :Bool = false
     
     //Todoの締め切り
     var deadline :String?
+    
+    //作成した日時    
+    var createdAt :String?
+    
+    //完了した日時
+    var doneAt :String?
+    
+    //重要度
+    var weight :String?
     
     //コンストラクタ
     override init() {
@@ -253,14 +263,14 @@ class MyTodo: NSObject, NSCoding {
     
     //デシリアライズ処理(デコード)
     required init?(coder aDecoder: NSCoder) {
-        todoTitle = aDecoder.decodeObjectForKey("todoTitle") as? String
-        todoDone = aDecoder.decodeBoolForKey("todoDone")
+        title = aDecoder.decodeObjectForKey("todoTitle") as? String
+        status = aDecoder.decodeBoolForKey("todoDone")
     }
     
     //シリアライズ処理(エンコード)
     func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeObject(todoTitle, forKey: "todoTitle")
-        aCoder.encodeBool(todoDone, forKey: "todoDone")
+        aCoder.encodeObject(title, forKey: "todoTitle")
+        aCoder.encodeBool(status, forKey: "todoDone")
     }
 }
 
