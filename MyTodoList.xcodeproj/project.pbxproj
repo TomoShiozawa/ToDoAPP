@@ -12,6 +12,8 @@
 		117CE8AE1BB2A12B005C5F31 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 117CE8AC1BB2A12B005C5F31 /* Main.storyboard */; };
 		117CE8B01BB2A12B005C5F31 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 117CE8AF1BB2A12B005C5F31 /* Assets.xcassets */; };
 		117CE8B31BB2A12B005C5F31 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 117CE8B11BB2A12B005C5F31 /* LaunchScreen.storyboard */; };
+		971ACF7EB423F1E5B88ADC6A /* Pods_MyTodoList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14A59794CC560F0AE737A925 /* Pods_MyTodoList.framework */; };
+		B764A2531D0164C700D5EAF8 /* THCalendarDatePicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B764A2521D0164C700D5EAF8 /* THCalendarDatePicker.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +24,10 @@
 		117CE8AF1BB2A12B005C5F31 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		117CE8B21BB2A12B005C5F31 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		117CE8B41BB2A12B005C5F31 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		14A59794CC560F0AE737A925 /* Pods_MyTodoList.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MyTodoList.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A36ED1633916D3B8638C82DB /* Pods-MyTodoList.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyTodoList.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MyTodoList/Pods-MyTodoList.debug.xcconfig"; sourceTree = "<group>"; };
+		B764A2521D0164C700D5EAF8 /* THCalendarDatePicker.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = THCalendarDatePicker.framework; path = "Pods/../build/Debug-iphoneos/THCalendarDatePicker/THCalendarDatePicker.framework"; sourceTree = "<group>"; };
+		B9D2AA80A9B12F7BC351924F /* Pods-MyTodoList.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyTodoList.release.xcconfig"; path = "Pods/Target Support Files/Pods-MyTodoList/Pods-MyTodoList.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,6 +35,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B764A2531D0164C700D5EAF8 /* THCalendarDatePicker.framework in Frameworks */,
+				971ACF7EB423F1E5B88ADC6A /* Pods_MyTodoList.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -40,6 +48,8 @@
 			children = (
 				117CE8A71BB2A12B005C5F31 /* MyTodoList */,
 				117CE8A61BB2A12B005C5F31 /* Products */,
+				D9FDAA95FC80DD6260F05BE7 /* Pods */,
+				523C08DAAE039A1E5F7A0979 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -64,6 +74,24 @@
 			path = MyTodoList;
 			sourceTree = "<group>";
 		};
+		523C08DAAE039A1E5F7A0979 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B764A2521D0164C700D5EAF8 /* THCalendarDatePicker.framework */,
+				14A59794CC560F0AE737A925 /* Pods_MyTodoList.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D9FDAA95FC80DD6260F05BE7 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				A36ED1633916D3B8638C82DB /* Pods-MyTodoList.debug.xcconfig */,
+				B9D2AA80A9B12F7BC351924F /* Pods-MyTodoList.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -71,9 +99,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 117CE8B71BB2A12B005C5F31 /* Build configuration list for PBXNativeTarget "MyTodoList" */;
 			buildPhases = (
+				5966AB68B058600AA31C7F39 /* 📦 Check Pods Manifest.lock */,
 				117CE8A11BB2A12B005C5F31 /* Sources */,
 				117CE8A21BB2A12B005C5F31 /* Frameworks */,
 				117CE8A31BB2A12B005C5F31 /* Resources */,
+				AAA093B36DE4DC87071B61E8 /* 📦 Embed Pods Frameworks */,
+				F84E275E78158D03BA348A71 /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -129,6 +160,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5966AB68B058600AA31C7F39 /* 📦 Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		AAA093B36DE4DC87071B61E8 /* 📦 Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MyTodoList/Pods-MyTodoList-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F84E275E78158D03BA348A71 /* 📦 Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MyTodoList/Pods-MyTodoList-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		117CE8A11BB2A12B005C5F31 /* Sources */ = {
@@ -245,10 +324,20 @@
 		};
 		117CE8B81BB2A12B005C5F31 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A36ED1633916D3B8638C82DB /* Pods-MyTodoList.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/THCalendarDatePicker",
+				);
+				"FRAMEWORK_SEARCH_PATHS[arch=*]" = (
+					"$(inherited)",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/KNSemiModalViewController_hons82\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/THCalendarDatePicker\"",
+				);
 				INFOPLIST_FILE = MyTodoList/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -260,10 +349,15 @@
 		};
 		117CE8B91BB2A12B005C5F31 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B9D2AA80A9B12F7BC351924F /* Pods-MyTodoList.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/THCalendarDatePicker",
+				);
 				INFOPLIST_FILE = MyTodoList/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

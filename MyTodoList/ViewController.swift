@@ -7,11 +7,12 @@
 //
 
 import UIKit
+import THCalendarDatePicker
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate{
 
-    //TODOを格納する配列
-    var todoList = [MyTodo]()
+    //taskを格納する配列
+    var taskList = [Task]()
     
     //入力用のTextField
     var titleTextField: UITextField?
@@ -36,11 +37,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //Todoデータの読み込み処理(ここは勉強不足)
+        //taskデータの読み込み処理(ここは勉強不足)
         let userDefaults = NSUserDefaults.standardUserDefaults()
-        if let todoListData = userDefaults.objectForKey("todoList") as? NSData {
-            if let storedTodoList = NSKeyedUnarchiver.unarchiveObjectWithData(todoListData) as? [MyTodo] {
-                todoList.appendContentsOf(storedTodoList)
+        if let todoListData = userDefaults.objectForKey("taskList") as? NSData {
+            if let storedTodoList = NSKeyedUnarchiver.unarchiveObjectWithData(todoListData) as? [Task] {
+                taskList.appendContentsOf(storedTodoList)
             }
         }
         
@@ -81,7 +82,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     */
     @IBAction func tapAddButton(sender: AnyObject) {
         //アラートダイアログ生成
-        let alertController = UIAlertController(title: "TODO追加", message: "TODOを入力してください", preferredStyle: UIAlertControllerStyle.Alert)
+        let alertController = UIAlertController(title: "task追加", message: "taskを入力してください", preferredStyle: UIAlertControllerStyle.Alert)
         
         //テキストエリアを追加
         //title用
@@ -111,28 +112,28 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             //アラートのUITextFieldsを全部配列として取得
             let textFields:Array<UITextField>? = alertController.textFields as Array<UITextField>?
             
-            //入力されたTodoをtodoListに追加
+            //入力されたtaskをtaskListに追加
             if textFields != nil {
-                let myTodo = MyTodo()
+                let task = Task()
                 //textFieldsの１個目がTitle
-                myTodo.title = alertController.textFields![0].text!
+                task.title = alertController.textFields![0].text!
                 //textFieldsの2個目がDeadline
-                myTodo.deadline = alertController.textFields![1].text!
+                task.deadline = self.datePicker.date
                 //作成日時を取得してcreatedAtに入れる
-                myTodo.createdAt = self.dateFormatter.stringFromDate(NSDate())
+                task.createdAt = NSDate()
                 //重要度を入れる
                 let weightText = alertController.textFields![2].text!
                 if weightText == "ASAP" {
-                    myTodo.weight = 3
+                    task.weight = 3
                 }
                 else if weightText == "Normal" {
-                    myTodo.weight = 2
+                    task.weight = 2
                 }
                 else if weightText == "In the future" {
-                    myTodo.weight = 1
+                    task.weight = 1
                 }
-                //todoListに追加
-                self.todoList.insert(myTodo, atIndex: 0)
+                //taskListに追加
+                self.taskList.insert(task, atIndex: 0)
             }
             
             //テーブルに行が追加されたことをテーブルに通知
@@ -142,11 +143,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             
             //保存処理
             //NSData型にシリアライズする
-            let data :NSData = NSKeyedArchiver.archivedDataWithRootObject(self.todoList)
+            let data :NSData = NSKeyedArchiver.archivedDataWithRootObject(self.taskList)
             
             //NSUserDefaultsに保存
             let userDefaults = NSUserDefaults.standardUserDefaults()
-            userDefaults.setObject(data, forKey: "todoList")
+            userDefaults.setObject(data, forKey: "taskList")
             userDefaults.synchronize()
         }
         //OKボタンを追加
@@ -201,8 +202,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     テーブルの行数を返す
     */
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //TODOの配列の長さを返す
-        return todoList.count
+        //taskの配列の長さを返す
+        return taskList.count
     }
     
     /*
@@ -213,14 +214,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         //storyboardで指定したtodoCell識別子を利用して再利用可能なセルを取得する(メモリを有効活用するための処理らしい、勉強不足)
         let cell = tableView.dequeueReusableCellWithIdentifier("todoCell", forIndexPath: indexPath)
         
-        //行番号に合ったTODOを取得
-        let todo = todoList[indexPath.row]
+        //行番号に合ったtaskを取得
+        let task = taskList[indexPath.row]
         
-        //セルのラベルにTODOのタイトルをセット
-        cell.textLabel!.text = todo.title
+        //セルのラベルにtaskのタイトルをセット
+        cell.textLabel!.text = task.title
         
         //状態によってチェックマークをつける
-        if todo.status {
+        if task.status {
             //完了していたらチェックマーク
             cell.accessoryType = UITableViewCellAccessoryType.Checkmark
         }
@@ -236,18 +237,18 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     セルをタップした時の処理
     */
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let todo = todoList[indexPath.row]
+        let task = taskList[indexPath.row]
         
         //完了にするかどうか
-        if todo.status {
+        if task.status {
             //完了済みの場合は未完に変更
-            todo.status = false
+            task.status = false
         }
         else {
             //未完の場合は完了済みに変更
-            todo.status = true
+            task.status = true
             //完了した日付をdoneAtに入れる
-            todo.doneAt = self.dateFormatter.stringFromDate(NSDate())
+            task.doneAt = NSDate()
         }
         
         //セルの状態を更新
@@ -255,11 +256,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         //データ保存
         //NSData型にシリアライズする
-        let data :NSData = NSKeyedArchiver.archivedDataWithRootObject(todoList)
+        let data :NSData = NSKeyedArchiver.archivedDataWithRootObject(taskList)
         
         //NSUserDefaultsに保存
         let userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.setObject(data, forKey: "todoList")
+        userDefaults.setObject(data, forKey: "taskList")
         userDefaults.synchronize()
     }
     
@@ -279,44 +280,44 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         //削除処理かどうか
         if editingStyle == .Delete {
             
-            //todoListから削除
-            todoList.removeAtIndex(indexPath.row)
+            //taskListから削除
+            taskList.removeAtIndex(indexPath.row)
             
             //セルを削除
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
             
             //データ保存
             //NSData型にシリアライズする
-            let data :NSData = NSKeyedArchiver.archivedDataWithRootObject(todoList)
+            let data :NSData = NSKeyedArchiver.archivedDataWithRootObject(taskList)
             
             //NSUserDefaultsに保存
             let userDefaults = NSUserDefaults.standardUserDefaults()
-            userDefaults.setObject(data, forKey: "todoList")
+            userDefaults.setObject(data, forKey: "taskList")
             userDefaults.synchronize()
         }
     }
 }
 
-//Todo用のクラス
-class MyTodo: NSObject, NSCoding {
+//Task用のクラス
+class Task: NSObject, NSCoding {
 
-    //Todoのタイトル
+    //Taskのタイトル
     var title :String?
     
-    //Todoを完了したかどうかを表すフラグ
+    //Taskを完了したかどうかを表すフラグ
     var status :Bool = false
     
-    //Todoの締め切り
-    var deadline :String?
+    //Taskの締め切り
+    var deadline :NSDate?
     
     //重要度
-    var weight :Int32?
+    var weight :Int32 = 2
     
     //作成した日時    
-    var createdAt :String?
+    var createdAt :NSDate?
     
     //完了した日時
-    var doneAt :String?
+    var doneAt :NSDate?
     
     //コンストラクタ
     override init() {
@@ -325,12 +326,12 @@ class MyTodo: NSObject, NSCoding {
     
     //デシリアライズ処理(デコード)
     required init?(coder aDecoder: NSCoder) {
-        title = aDecoder.decodeObjectForKey("todoTitle") as? String
-        status = aDecoder.decodeBoolForKey("todoStatus")
-        deadline = aDecoder.decodeObjectForKey("todoDeadline") as? String
-        weight = aDecoder.decodeIntForKey("todoWeight") as? Int32
-        createdAt = aDecoder.decodeObjectForKey("todoCreatedAt") as? String
-        doneAt = aDecoder.decodeObjectForKey("todoDoneAt") as? String
+        title = aDecoder.decodeObjectForKey("taskTitle") as? String
+        status = aDecoder.decodeBoolForKey("taskStatus")
+        deadline = aDecoder.decodeObjectForKey("taskDeadline") as? NSDate
+        weight = aDecoder.decodeIntForKey("taskWeight") as Int32
+        createdAt = aDecoder.decodeObjectForKey("taskCreatedAt") as? NSDate
+        doneAt = aDecoder.decodeObjectForKey("taskDoneAt") as? NSDate
     }
     
     //シリアライズ処理(エンコード)
@@ -338,7 +339,7 @@ class MyTodo: NSObject, NSCoding {
         aCoder.encodeObject(title, forKey: "todoTitle")
         aCoder.encodeBool(status, forKey: "todoStatus")
         aCoder.encodeObject(deadline, forKey: "todoDeadline")
-        aCoder.encodeInt(weight!, forKey: "todoWeight")
+        aCoder.encodeInt(weight, forKey: "todoWeight")
         aCoder.encodeObject(createdAt, forKey: "todoCreatedAt")
         aCoder.encodeObject(doneAt, forKey: "todoDoneAT")
     }
