@@ -336,12 +336,12 @@ class Task: NSObject, NSCoding {
     
     //シリアライズ処理(エンコード)
     func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeObject(title, forKey: "todoTitle")
-        aCoder.encodeBool(status, forKey: "todoStatus")
-        aCoder.encodeObject(deadline, forKey: "todoDeadline")
-        aCoder.encodeInt(weight, forKey: "todoWeight")
-        aCoder.encodeObject(createdAt, forKey: "todoCreatedAt")
-        aCoder.encodeObject(doneAt, forKey: "todoDoneAT")
+        aCoder.encodeObject(title, forKey: "taskTitle")
+        aCoder.encodeBool(status, forKey: "taskStatus")
+        aCoder.encodeObject(deadline, forKey: "taskDeadline")
+        aCoder.encodeInt(weight, forKey: "taskWeight")
+        aCoder.encodeObject(createdAt, forKey: "taskCreatedAt")
+        aCoder.encodeObject(doneAt, forKey: "taskDoneAT")
     }
 }
 
