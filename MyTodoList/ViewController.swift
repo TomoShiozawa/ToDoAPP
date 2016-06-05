@@ -230,6 +230,31 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             cell.accessoryType = UITableViewCellAccessoryType.None
         }
         
+        /*// ProgressViewを作成する.
+        let myProgressView: UIProgressView = UIProgressView(frame: CGRectMake(0, cell.frame.height / 2.0, cell.frame.width, cell.frame.height))
+        myProgressView.progressTintColor = UIColor.greenColor()
+        
+        
+        // バーの高さを設定する(横に1.0倍,縦に2.0倍).
+        myProgressView.transform = CGAffineTransformMakeScale(1.0, 25.0)
+        
+        // 進捗具合を設定する(0.0~1.0).
+        myProgressView.progress = 0.5
+        
+        // アニメーションを付ける.
+        myProgressView.setProgress(1.0, animated: true)
+        
+        // Viewに追加する.
+        cell.addSubview(myProgressView)
+        myProgressView.layer.borderColor = UIColor.blackColor().CGColor
+        myProgressView.layer.borderWidth = 0.1
+        cell.addSubview(myProgressView)
+        
+        myProgressView.alpha = 0.4
+        
+        //cell.addSubview(myLabel)
+        //cell.backgroundColor = UIColor.lightGrayColor()*/
+        
         return cell
     }
     
